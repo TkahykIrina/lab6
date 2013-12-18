@@ -1,0 +1,101 @@
+unit Unit1;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils, FileUtil, TAGraph, TASeries, Forms, Controls, Graphics,
+  Dialogs, Menus, StdCtrls, ExtCtrls, MaskEdit, CheckLst, Grids, PairSplitter,
+  ColorBox, ValEdit;
+
+type
+
+  { TForm1 }
+
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    Chart1: TChart;
+    Chart1LineSeries1: TLineSeries;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Memo1: TMemo;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+
+  private
+    { private declarations }
+  public
+    { public declarations }
+  end;
+
+var
+  Form1: TForm1;
+  xn,xk:real;
+
+implementation
+
+{$R *.lfm}
+
+{ TForm1 }
+Function f(x:real):real;
+begin
+  f:=((sqr(x))*x)-exp(4*x)-5.5
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+var z,shag:real;
+begin
+      xn:=strtofloat(Edit1.Text);
+  xk:=strtofloat(Edit2.Text);
+  shag :=abs(xk-xn)/12;
+  z:=xn;
+  while  z<=xk do
+  begin
+
+   Chart1LineSeries1.Addxy (z,f(z));
+   z:=z+shag;
+  end;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var  h,c, x, fune:real;
+  kor:string;
+begin
+  memo1.Clear;
+
+  h:=strtofloat(Edit3.Text);
+  if (f(xn)*f(xk))>0 then
+  showmessage('Kornci nety')
+  else
+    begin
+      c:=(xn+xk)/2;
+      while abs(f(c))>h do
+      begin
+        if (f(xn)*f(c))>0 then
+        xn:=c
+        else
+          xk:=c;
+        c:=(xn+xk)/2;
+        fune:=f(c);
+      memo1.Lines.Add('x='+floattostrf(c,fffixed,5,3)+'   F(x)='+floattostrf(fune,fffixed,5,3));
+      end;
+    end;
+
+end;
+
+end.
+            
